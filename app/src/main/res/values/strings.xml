@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Asesment1</string>
+    <string name="km">km</string>
+    <string name="mil">mil</string>
+    <string name="meter">meter</string>
+    <string name="label_jarak">Masukkan Jarak</string>
+    <string name="pilih_satuan_jarak">Pilih satuan jarak:</string>
+    <string name="label_masukkan_kecepatan">Masukkan Kecepatan</string>
+    <string name="satuan_km_perjam">km/jam </string>
+    <string name="hitung">Hitung</string>
 </resources>
