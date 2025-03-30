@@ -11,10 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
@@ -61,7 +63,11 @@ fun MainScreen() {
 @Composable
 fun ScreenContent(modifier: Modifier = Modifier) {
     var distance by remember { mutableStateOf("") }
+    var distanceError by remember { mutableStateOf(false) }
+
     var speed by remember { mutableStateOf("") }
+    var speedError by remember { mutableStateOf(false) }
+
     var result by remember { mutableStateOf("") }
     val unitOptions = listOf(
         stringResource(id = R.string.km),
@@ -76,11 +82,17 @@ fun ScreenContent(modifier: Modifier = Modifier) {
             value = distance,
             onValueChange = { distance = it },
             label = { Text(text = stringResource(R.string.label_jarak)) },
+            trailingIcon = { IconPicker(distanceError, "") },
+            supportingText = { ErrorHintInputInvalid(distanceError) },
+            isError = distanceError,
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )
+
         Spacer(modifier = Modifier.height(8.dp))
+
         Text(text = stringResource(R.string.pilih_satuan_jarak))
+
         Row (
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
@@ -98,16 +110,19 @@ fun ScreenContent(modifier: Modifier = Modifier) {
                 }
             }
         }
+
         Spacer(modifier = Modifier.height(8.dp))
+
         OutlinedTextField(
             value = speed,
             onValueChange = { speed = it },
             label = { Text(text = stringResource(R.string.label_masukkan_kecepatan)) },
+            trailingIcon = { IconPicker(speedError, "km/jam") },
+            supportingText = { ErrorHintInputInvalid(speedError) },
+            isError = speedError,
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-            trailingIcon = { Text(text = stringResource(R.string.satuan_km_perjam)) },
             modifier = Modifier.fillMaxWidth()
         )
-
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -116,12 +131,18 @@ fun ScreenContent(modifier: Modifier = Modifier) {
             horizontalArrangement = Arrangement.Center
         ) {
             Button(onClick = {
+                distanceError = (distance == "" || distance == "0")
+                speedError = (speed == "" || speed == "0")
+                if (distanceError || speedError) {
+                    return@Button
+                }
+
                 result = try {
                     val dist = distance.toDouble()
                     val spd = speed.toDouble()
                     if (spd > 0) calculateTravelTime(convertDistance(dist, unit), spd) else "Kecepatan harus lebih dari 0!"
                 } catch (e: NumberFormatException) {
-                    "Masukkan angka yang valid!"
+                    "Input harus berupa angka!"
                 }
             }) {
                 Text(text = stringResource(R.string.hitung))
@@ -155,6 +176,22 @@ fun calculateTravelTime(distance: Double, speed: Double): String {
     val minutes = ((timeInHours - hours) * 60).toInt()
     val seconds = (((timeInHours - hours) * 60 - minutes) * 60).toInt()
     return "Hasil: $hours jam $minutes menit $seconds detik"
+}
+
+@Composable
+fun IconPicker(isError: Boolean, unit: String) {
+    if (isError) {
+        Icon(imageVector = Icons.Filled.Warning, contentDescription = "Error", tint = MaterialTheme.colorScheme.error)
+    } else {
+        Text (text = unit)
+    }
+}
+
+@Composable
+fun ErrorHintInputInvalid(isError: Boolean) {
+    if (isError) {
+        Text(text = stringResource(id = R.string.input_invalid))
+    }
 }
 
 

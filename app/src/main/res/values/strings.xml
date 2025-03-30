@@ -8,4 +8,6 @@
     <string name="label_masukkan_kecepatan">Masukkan Kecepatan</string>
     <string name="satuan_km_perjam">km/jam </string>
     <string name="hitung">Hitung</string>
+    <string name="input_invalid">Tidak Boleh Kosong!</string>
+    <string name="bukan_angka">Input harus Berupa Angka! </string>
 </resources>
