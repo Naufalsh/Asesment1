@@ -8,6 +8,15 @@
     <string name="label_masukkan_kecepatan">Masukkan Kecepatan</string>
     <string name="satuan_km_perjam">km/jam </string>
     <string name="hitung">Hitung</string>
-    <string name="input_invalid">Tidak Boleh Kosong!</string>
-    <string name="bukan_angka">Input harus Berupa Angka! </string>
+    <string name="input_invalid">Masukkan Input Bilangan yang Valid!\nGunakan Bilangan Bulat Positif\nInput Tidak Boleh Kosong!</string>
+    <string name="tentang_aplikasi">Tentang Aplikasi</string>
+    <string name="copyright">Lorem ipsum dolor sit amet, consectetur adipisicing elit. A
+        b consequatur odio rem repellat sed soluta! Ab ad alias aliquam animi ducimus eligendi harum illum,
+        iste natus nesciunt nostrum numquam ratione?</string>
+    <string name="keterangan_hasil">Jarak yang ingin Anda Tempuh adalah : %1$s %2$s
+        \nAnda Menempuh jarak tersebut dengan Kecepatan : %3$skm/jam.
+        \n\nEstimasi waktu sampai :
+    </string>
+    <string name="hasil_waktu_tempuh">%1$d jam %2$d menit %3$d detik</string>"
+    <string name="deskripsi_aplikasi">Aplikasi ini akan berfungsi untuk menghitung waktu dari suatu jarak tertenu berdasarkan Kecepatannya. </string>
 </resources>

@@ -4,11 +4,11 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -30,9 +30,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -65,19 +66,31 @@ fun ScreenContent(modifier: Modifier = Modifier) {
     var distance by remember { mutableStateOf("") }
     var distanceError by remember { mutableStateOf(false) }
 
-    var speed by remember { mutableStateOf("") }
-    var speedError by remember { mutableStateOf(false) }
-
-    var result by remember { mutableStateOf("") }
-    val unitOptions = listOf(
+    val radioOptions = listOf(
         stringResource(id = R.string.km),
         stringResource(id = R.string.mil),
         stringResource(id = R.string.meter)
     )
-    var unit by rememberSaveable { mutableStateOf(unitOptions[0]) }
+    var distanceType by rememberSaveable { mutableStateOf(radioOptions[0]) }
+
+    var speed by remember { mutableStateOf("") }
+    var speedError by remember { mutableStateOf(false) }
+
+    var result by remember { mutableStateOf(Triple(0,0,0)) }
+
 
     Column(
-        modifier = modifier.padding(16.dp).verticalScroll(rememberScrollState())) {
+        modifier = modifier.fillMaxSize().
+        verticalScroll(rememberScrollState())
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = stringResource(id = R.string.deskripsi_aplikasi),
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.fillMaxWidth()
+        )
         OutlinedTextField(
             value = distance,
             onValueChange = { distance = it },
@@ -89,29 +102,25 @@ fun ScreenContent(modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
-
         Text(text = stringResource(R.string.pilih_satuan_jarak))
 
         Row (
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
+            modifier = Modifier.padding(top = 6.dp)
         ){
-            unitOptions.forEach { option ->
-                Row(
-                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
-                    modifier = Modifier.padding(end = 8.dp)
-                ) {
-                    RadioButton(
-                        selected = unit == option,
-                        onClick = { unit = option }
+            radioOptions.forEach{text ->
+                DistanceTypeOption(
+                    label = text,
+                    isSelected = distanceType == text,
+                    modifier =Modifier.selectable(
+                        selected = distanceType == text,
+                        onClick ={distanceType = text},
+                        role = Role.RadioButton
                     )
-                    Text(option)
-                }
+                        .weight(1f)
+                        .padding(16.dp)
+                )
             }
         }
-
-        Spacer(modifier = Modifier.height(8.dp))
 
         OutlinedTextField(
             value = speed,
@@ -124,59 +133,84 @@ fun ScreenContent(modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = {
+            val numberRegex = Regex("^\\d+(\\.\\d+)?$")  // Hanya angka positif
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Button(onClick = {
-                distanceError = (distance == "" || distance == "0")
-                speedError = (speed == "" || speed == "0")
-                if (distanceError || speedError) {
-                    return@Button
-                }
+            distanceError = distance.isEmpty() || !distance.matches(numberRegex) || distance.toDouble() <= 0
+            speedError = speed.isEmpty() || !speed.matches(numberRegex) || speed.toDouble() <= 0
 
-                result = try {
-                    val dist = distance.toDouble()
-                    val spd = speed.toDouble()
-                    if (spd > 0) calculateTravelTime(convertDistance(dist, unit), spd) else "Kecepatan harus lebih dari 0!"
-                } catch (e: NumberFormatException) {
-                    "Input harus berupa angka!"
-                }
-            }) {
-                Text(text = stringResource(R.string.hitung))
+            if (!distanceError && !speedError) {
+                val convertedDistance = convertDistance(distance.toDouble(), distanceType)
+                result = calculateTravelTime(convertedDistance, speed.toDouble())
+            } else {
+                result = Triple(0, 0, 0) // Reset jika input salah
             }
+        }) {
+            Text(text = stringResource(R.string.hitung))
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
-        HorizontalDivider(
-            color = Color.Gray,
-            thickness = 1.dp,
-            modifier = Modifier.fillMaxWidth()
-        )
+        if (result != Triple(0, 0, 0)) {
+            HorizontalDivider(
+                modifier = Modifier.padding(vertical = 8.dp),
+                thickness = 1.dp
+            )
+            Text(
+                stringResource(R.string.keterangan_hasil,
+                    distance,
+                    distanceType,
+                    speed),
+                modifier = Modifier.padding(8.dp),
+                style = MaterialTheme.typography.titleMedium
+            )
+            Text(
+                stringResource(R.string.hasil_waktu_tempuh,
+                    result.first,
+                    result.second,
+                    result.third),
+                modifier = Modifier.padding(8.dp),
+                style = MaterialTheme.typography.titleLarge
+            )
 
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(text = result, style = MaterialTheme.typography.bodyLarge)
+        }
+    }
+}
+
+@Composable
+fun DistanceTypeOption(label:String, isSelected:Boolean, modifier:Modifier) {
+    Row (
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RadioButton(selected =  isSelected, onClick = null)
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(start = 8.dp)
+        )
     }
 }
 
 
 fun convertDistance(distance: Double, unit: String): Double {
-    return when (unit) {
+    return when (unit.lowercase()) {
         "mil" -> distance * 1.60934
         "meter" -> distance / 1000
-        else -> distance
+        "km" -> distance
+        else -> {
+            println("Warning: Unit tidak dikenali ($unit), menggunakan default (km).")
+            distance
+        }
     }
 }
 
-fun calculateTravelTime(distance: Double, speed: Double): String {
+fun calculateTravelTime(distance: Double, speed: Double): Triple<Int, Int, Int> {
     val timeInHours = distance / speed
     val hours = timeInHours.toInt()
     val minutes = ((timeInHours - hours) * 60).toInt()
     val seconds = (((timeInHours - hours) * 60 - minutes) * 60).toInt()
-    return "Hasil: $hours jam $minutes menit $seconds detik"
+    return Triple(hours, minutes, seconds)
 }
+
 
 @Composable
 fun IconPicker(isError: Boolean, unit: String) {
