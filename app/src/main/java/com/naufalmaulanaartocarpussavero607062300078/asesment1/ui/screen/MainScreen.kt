@@ -1,5 +1,6 @@
 package com.naufalmaulanaartocarpussavero607062300078.asesment1.ui.screen
 
+import android.content.Intent
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,11 +13,14 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
@@ -27,23 +31,26 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.naufalmaulanaartocarpussavero607062300078.asesment1.R
+import com.naufalmaulanaartocarpussavero607062300078.asesment1.navigation.Screen
 import com.naufalmaulanaartocarpussavero607062300078.asesment1.ui.theme.Asesment1Theme
 
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun MainScreen() {
+fun MainScreen(navController : NavHostController) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -53,7 +60,14 @@ fun MainScreen() {
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary,
-                )
+                ), actions = {
+                    IconButton(onClick = { navController.navigate(Screen.History.route) }) {
+                        Icon(
+                            imageVector = Icons.Outlined.Info,
+                            contentDescription = stringResource(id = R.string.riwayat)
+                        )
+                    }
+                }
             )
         }
     ) { innerPadding ->
@@ -63,8 +77,8 @@ fun MainScreen() {
 
 @Composable
 fun ScreenContent(modifier: Modifier = Modifier) {
-    var distance by remember { mutableStateOf("") }
-    var distanceError by remember { mutableStateOf(false) }
+    var distance by rememberSaveable { mutableStateOf("") }
+    var distanceError by rememberSaveable { mutableStateOf(false) }
 
     val radioOptions = listOf(
         stringResource(id = R.string.km),
@@ -73,10 +87,10 @@ fun ScreenContent(modifier: Modifier = Modifier) {
     )
     var distanceType by rememberSaveable { mutableStateOf(radioOptions[0]) }
 
-    var speed by remember { mutableStateOf("") }
-    var speedError by remember { mutableStateOf(false) }
+    var speed by rememberSaveable { mutableStateOf("") }
+    var speedError by rememberSaveable { mutableStateOf(false) }
 
-    var result by remember { mutableStateOf(Triple(0,0,0)) }
+    var result by rememberSaveable { mutableStateOf(Triple(0,0,0)) }
 
 
     Column(
@@ -134,7 +148,7 @@ fun ScreenContent(modifier: Modifier = Modifier) {
         )
 
         Button(onClick = {
-            val numberRegex = Regex("^\\d+(\\.\\d+)?$")  // Hanya angka positif
+            val numberRegex = Regex("^\\d+(\\.\\d+)?$")
 
             distanceError = distance.isEmpty() || !distance.matches(numberRegex) || distance.toDouble() <= 0
             speedError = speed.isEmpty() || !speed.matches(numberRegex) || speed.toDouble() <= 0
@@ -143,7 +157,7 @@ fun ScreenContent(modifier: Modifier = Modifier) {
                 val convertedDistance = convertDistance(distance.toDouble(), distanceType)
                 result = calculateTravelTime(convertedDistance, speed.toDouble())
             } else {
-                result = Triple(0, 0, 0) // Reset jika input salah
+                result = Triple(0, 0, 0)
             }
         }) {
             Text(text = stringResource(R.string.hitung))
@@ -171,25 +185,11 @@ fun ScreenContent(modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.titleLarge
             )
 
+            ShareResult(result)
+
         }
     }
 }
-
-@Composable
-fun DistanceTypeOption(label:String, isSelected:Boolean, modifier:Modifier) {
-    Row (
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        RadioButton(selected =  isSelected, onClick = null)
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(start = 8.dp)
-        )
-    }
-}
-
 
 fun convertDistance(distance: Double, unit: String): Double {
     return when (unit.lowercase()) {
@@ -211,7 +211,6 @@ fun calculateTravelTime(distance: Double, speed: Double): Triple<Int, Int, Int> 
     return Triple(hours, minutes, seconds)
 }
 
-
 @Composable
 fun IconPicker(isError: Boolean, unit: String) {
     if (isError) {
@@ -229,11 +228,52 @@ fun ErrorHintInputInvalid(isError: Boolean) {
 }
 
 
+@Composable
+fun DistanceTypeOption(label:String, isSelected:Boolean, modifier:Modifier) {
+    Row (
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RadioButton(selected =  isSelected, onClick = null)
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(start = 8.dp)
+        )
+    }
+}
+
+@Composable
+fun ShareResult(result: Triple<Int, Int, Int>) {
+    val context = LocalContext.current
+
+    IconButton(onClick = {
+        val shareText = context.getString(
+            R.string.text_bagikan,
+            result.first, result.second, result.third
+        )
+
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, shareText)
+        }
+        context.startActivity(Intent.createChooser(intent, context.getString(R.string.share)))
+    }) {
+        Icon(
+            imageVector = Icons.Filled.Share,
+            contentDescription = stringResource(id = R.string.share)
+        )
+    }
+}
+
+
+
+
 @Preview(showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 fun MainScreenPreview() {
     Asesment1Theme {
-        MainScreen()
+        MainScreen(rememberNavController())
     }
 }

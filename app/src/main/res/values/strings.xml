@@ -15,8 +15,15 @@
         iste natus nesciunt nostrum numquam ratione?</string>
     <string name="keterangan_hasil">Jarak yang ingin Anda Tempuh adalah : %1$s %2$s
         \nAnda Menempuh jarak tersebut dengan Kecepatan : %3$skm/jam.
-        \n\nEstimasi waktu sampai :
+        \n\nEstimasi waktu sampai tujuan :
     </string>
     <string name="hasil_waktu_tempuh">%1$d jam %2$d menit %3$d detik</string>"
     <string name="deskripsi_aplikasi">Aplikasi ini akan berfungsi untuk menghitung waktu dari suatu jarak tertenu berdasarkan Kecepatannya. </string>
+    <string name="info_aplikasi">Info Aplikasi</string>
+    <string name="riwayat">Riwayat</string>
+    <string name="kembali">kembali</string>
+    <string name="riwayat_kosong">Tidak ada Riwayat Perhitungan</string>
+    <string name="bersihkan_riwayat">Bersihkan Riwayat</string>
+    <string name="text_bagikan">Waktu tempuh perjalanan saya adalah %1$d jam, %2$d menit, dan %3$d detik!</string>
+    <string name="share">bagikan</string>
 </resources>
