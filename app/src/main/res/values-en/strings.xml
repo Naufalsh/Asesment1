@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Asesment1</string>
+    <string name="text_bagikan">My travel time is %1$d hours, %2$d minutes, and %3$d seconds!</string>
+    <string name="share">share</string>
+    <string name="mil">mile(s)</string>
+    <string name="meter">meter</string>
+    <string name="km">km</string>
+    <string name="label_jarak">Enter Distance</string>
+    <string name="pilih_satuan_jarak">Choose Distance Unit:</string>
+    <string name="label_masukkan_kecepatan">Enter Speed</string>
+    <string name="satuan_km_perjam">km/h</string>
+    <string name="hitung">Count</string>
+    <string name="input_invalid">Please enter a valid number!\nMust be a positive integer.\nField cannot be empty!</string>
+    <string name="tentang_aplikasi">About This App</string>
+    <string name="keterangan_hasil">Distance you want to travel: %1$s %2$s \nYou are traveling this distance at: %3$s km/h.\n\nEstimated arrival time:</string>
+    <string name="hasil_waktu_tempuh">%1$d hour(s) %2$d minute(s) %3$d second(s)</string>
+    <string name="deskripsi_aplikasi">Calculate how long your trip will take based on distance and speed. Give it a try now!</string>
+    <string name="info_aplikasi">App Info</string>
+    <string name="kembali">back</string>
+</resources>

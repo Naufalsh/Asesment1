@@ -64,7 +64,7 @@ fun MainScreen(navController : NavHostController) {
                     IconButton(onClick = { navController.navigate(Screen.History.route) }) {
                         Icon(
                             imageVector = Icons.Outlined.Info,
-                            contentDescription = stringResource(id = R.string.riwayat)
+                            contentDescription = stringResource(id = R.string.info_aplikasi)
                         )
                     }
                 }
@@ -140,7 +140,7 @@ fun ScreenContent(modifier: Modifier = Modifier) {
             value = speed,
             onValueChange = { speed = it },
             label = { Text(text = stringResource(R.string.label_masukkan_kecepatan)) },
-            trailingIcon = { IconPicker(speedError, "km/jam") },
+            trailingIcon = { IconPicker(speedError, stringResource(R.string.satuan_km_perjam)) },
             supportingText = { ErrorHintInputInvalid(speedError) },
             isError = speedError,
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
