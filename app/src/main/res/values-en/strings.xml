@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Asesment1</string>
-    <string name="text_bagikan">My travel time is %1$d hours, %2$d minutes, and %3$d seconds!</string>
+    <string name="text_bagikan">My travel time is %1$d hour(s), %2$d minute(s), and %3$d second(s)!</string>
     <string name="share">share</string>
     <string name="mil">mile(s)</string>
     <string name="meter">meter</string>
