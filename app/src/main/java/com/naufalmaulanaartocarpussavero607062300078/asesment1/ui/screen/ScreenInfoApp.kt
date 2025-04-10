@@ -1,7 +1,6 @@
 package com.naufalmaulanaartocarpussavero607062300078.asesment1.ui.screen
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -97,32 +95,17 @@ fun ScreenInfoApp(navController: NavHostController) {
                 style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(bottom = 24.dp)
             )
-            Spacer(modifier = Modifier.height(8.dp))
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            contentAlignment = Alignment.Center // Pusatkan semua konten di tengah
-        ) {
-            Column(
+            Image(
+                painter = painterResource(id = R.drawable.kalkulator),
+                        contentDescription = "Calculator Illustration",
                 modifier = Modifier
-                    .verticalScroll(rememberScrollState())
+                    .size(200.dp)  // Ukuran bisa disesuaikan
                     .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                // Teks dan konten lainnya...
 
-                Image(
-                    painter = painterResource(id = R.drawable.kalkulator),
-                    contentDescription = "Calculator",
-                    modifier = Modifier
-                        .size(200.dp)
-                        .padding(16.dp),
-                    contentScale = ContentScale.Fit
-                )
-            }
+                contentScale = ContentScale.Fit
+            )
         }
+
     }
 }
 
