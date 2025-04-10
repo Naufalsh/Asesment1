@@ -17,4 +17,12 @@
     <string name="kembali">kembali</string>
     <string name="text_bagikan">Waktu tempuh perjalanan saya adalah %1$d jam, %2$d menit, dan %3$d detik!</string>
     <string name="share">bagikan</string>
+    <string name="deskripsi_info_aplikasi">Aplikasi ini dirancang untuk membantu pengguna dalam menghitung waktu tempuh berdasarkan jarak dan kecepatan.
+    Dengan tampilan yang sederhana, pengguna juga dapat dengan mudah memahami konsep dasar dalam fisika secara praktis </string>
+    <string name="cara_penghitungan">Cara Penghitungan:
+    \n1. Masukkan nilai jarak
+    \n2. Pilih satuan jarak yang diinginkan
+    \n3. Masukkan nilai kecepatan
+    \n4. Tekan tombol hitung untuk melihat hasil waktu tempuh</string>
+    <string name="cara_menghitung">Bagaimana cara memulai menghitungnya?</string>
 </resources>

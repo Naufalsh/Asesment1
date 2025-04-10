@@ -18,4 +18,12 @@
     <string name="deskripsi_aplikasi">Calculate how long your trip will take based on distance and speed. Give it a try now!</string>
     <string name="info_aplikasi">App Info</string>
     <string name="kembali">back</string>
+    <string name="deskripsi_info_aplikasi">This application is designed to help users calculate travel time based on distance and speed.
+    With a simple interface, users can also easily understand basic physics concepts in a practical way.</string>
+    <string name="cara_penghitungan">Calculation Method:
+    \n1. Enter the distance value
+    \n2. Select the desired distance unit
+    \n3. Enter the speed value
+    \n4. Press the calculate button to see the travel time result</string>
+    <string name="cara_menghitung">How To start Calculate?</string>
 </resources>
